@@ -27,8 +27,9 @@ var Configuration = builder.Configuration;
 var key = Encoding.ASCII.GetBytes(jwtKey);
 
 
-
-builder.Services.AddCors(options =>
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins", builder =>
     {
@@ -37,8 +38,24 @@ builder.Services.AddCors(options =>
         .AllowAnyHeader()
         .AllowCredentials();
     });
+    });
+
+}
+else{
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins", builder =>
+    {
+        builder.WithOrigins("https://yourbag.netlify.app", "https://yourbag.netlify.app/")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials();
+    });
     
 });
+}
+
+
 builder
     .Services.AddAuthentication(options =>
     {

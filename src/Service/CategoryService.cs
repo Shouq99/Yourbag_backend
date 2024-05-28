@@ -36,6 +36,7 @@ public class CategoryService
             CategoryId = Guid.NewGuid(),
             Name = newCategory.Name,
             Slug = Function.GetSlug(newCategory.Name ?? "")
+            
         };
         await _appDbContext.Categories.AddAsync(category);
         await _appDbContext.SaveChangesAsync();
