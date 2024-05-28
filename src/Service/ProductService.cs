@@ -19,23 +19,23 @@ public class ProductService
     public async Task<IEnumerable<Product>> GetAllProducts()
     {
         var products = await _appDbContext
-            .Products.Include(c => c.Category)
-            .Include(r => r.Reviews)
+            .Products
+          //  .Include(c => c.Category)
+         //   .Include(r => r.Reviews)
             .ToListAsync();
         return products;
     }
 
     // Get product by ID
-    public async Task<Product?> GetProductById(Guid id)
+    public async Task<Product?> GetProductById(string slug)
     {
         var foundProduct = await _appDbContext
             .Products.Include(c => c.Category)
             .Include(r => r.Reviews)
             .Include(i => i.OrderItems)
-            .FirstOrDefaultAsync(product => product.ProductId == id);
+            .FirstOrDefaultAsync(product => product.Slug == slug);
         return foundProduct;
     }
-
     public async Task<IEnumerable<Product>> SearchProducts(string searchKeyword)
     {
         searchKeyword = searchKeyword.ToLower();

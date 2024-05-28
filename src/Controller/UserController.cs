@@ -66,8 +66,8 @@ public class UserController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    [Authorize]
-    [Authorize(Policy = "RequiredNotBanned")]
+    //[Authorize]
+  //  [Authorize(Policy = "RequiredNotBanned")]
     public async Task<IActionResult> UpdateUser(Guid id, UserModel updateData)
     {
         var found =

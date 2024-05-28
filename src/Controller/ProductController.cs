@@ -74,21 +74,30 @@ public class ProductController : ControllerBase
         {
             return ApiResponse.NotFound("No products found matching the sort/filter criteria.");
         }
-
+        
+        var totalProducts = products.Count();
+        var totalPages = (int)Math.Ceiling(totalProducts / (double)limit);
         // Apply pagination
         var paginatedProducts = products.Skip((page - 1) * limit).Take(limit).ToList();
 
+    var response = new {
+        Products = paginatedProducts,
+        TotalPages = totalPages,
+        CurrentPage = page,
+        PageSize = limit,
+        TotalProducts = totalProducts
+    };
+
         return ApiResponse.Success(
             paginatedProducts,
-            "All products inside E-commerce system are returned"
-        );
+            "All products inside E-commerce system are returned");
     }
 
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetProductById(Guid id)
+    [HttpGet("{slug}")]
+    public async Task<IActionResult> GetProductById(string slug)
     {
         var foundProduct =
-            await _productService.GetProductById(id)
+            await _productService.GetProductById(slug)
             ?? throw new NotFoundException("There is no product found matching");
 
         return ApiResponse.Success(foundProduct, "Product are returned successfully");
