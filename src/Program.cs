@@ -27,34 +27,6 @@ var Configuration = builder.Configuration;
 var key = Encoding.ASCII.GetBytes(jwtKey);
 
 
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowSpecificOrigins", builder =>
-    {
-        builder.WithOrigins("http://localhost:3000")
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials();
-    });
-    });
-
-}
-else{
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowSpecificOrigins", builder =>
-    {
-        builder.WithOrigins("https://yourbag.netlify.app", "https://yourbag.netlify.app/")
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials();
-    });
-    
-});
-}
-
 
 builder
     .Services.AddAuthentication(options =>
@@ -89,7 +61,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 );
 
 
-
+    builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins", builder =>
+    {
+        builder.WithOrigins("http://localhost:3000","https://yourbag.netlify.app")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials();
+    });
+    });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
